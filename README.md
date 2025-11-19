@@ -84,25 +84,47 @@ Desglosamos la decisión del modelo para el primer paciente del set de prueba.
 
 ## 5. ⚖️ Auditoría Ética y Sesgos
 
-Se evaluó el principio de **Justicia (Fairness)** comparando el rendimiento en **Hombres** vs **Mujeres**.
+Se evaluó el principio de **Justicia (Fairness)** auditando el balance de datos y el rendimiento por género, siguiendo una secuencia lógica de verificación.
+
+### 5.1 Auditoría de Representatividad (Train vs Test)
+Primero, verificamos si el modelo tuvo suficientes oportunidades para estudiar ambos géneros.
+
+**Verificación de Balance:**
+> ![Gráficos comparativos de distribución por género Train vs Test](./img/distribucion-genero-train-test.png)
+
+* **Datos:** El modelo se entrenó con una **clara mayoría de hombres (aprox. 65%)** y una minoría de mujeres (35%).
+* **Hipótesis de Riesgo:** Al tener significativamente menos ejemplos de mujeres para aprender ("estudiar"), existe un riesgo estadístico alto de que el modelo no logre generalizar bien en este grupo.
+
+### 5.2 Análisis de Enfermedad Real (Ground Truth)
+Auditamos la tasa real de enfermedad en el dataset completo para entender la dificultad del diagnóstico.
+
+**Desglose de Enfermedad Real por Género:**
+> ![Gráfico de barras de Desglose Real de Enfermedad por Género](./img/enfermedad-real-por-genero.png)
+
+* **Datos Reales:**
+    * **Mujeres:** Solo el **26%** presentaba enfermedad. El modelo tuvo que aprender a detectar "Mujeres Enfermas" con una muestra extremadamente reducida (solo 25 casos positivos en total).
+    * **Hombres:** La mayoría (**56%**) estaba enfermo, proporcionando abundantes ejemplos positivos al algoritmo.
+
+### 5.3 Disparidad de Rendimiento y "La Paradoja"
+Finalmente, evaluamos la métrica crítica de **Sensibilidad (Recall)** para ver cómo afectaron los desbalances anteriores al diagnóstico final.
 
 **Gráfico de Disparidad:**
 > ![Inserte aquí la captura del gráfico de barras "Sensibilidad por Género"](./img/disparidad-rendimiento-por-genero.png)
 
-### 🚨 Resultados Críticos:
-Los datos revelaron un comportamiento inesperado en este experimento:
-1.  **Sensibilidad en Mujeres (1.00):** El modelo detectó el **100%** de los casos de enfermedad en mujeres. No hubo falsos negativos.
-2.  **Sensibilidad en Hombres (0.75):** El modelo falló al detectar la enfermedad en el **25%** de los hombres enfermos.
-3.  **Conclusión del Sesgo:** Existe una brecha de rendimiento del 25% que penaliza a los hombres. En un entorno hospitalario, este modelo sería peligroso para los pacientes masculinos, ya que 1 de cada 4 podría ser enviado a casa erróneamente sin tratamiento.
+### 🚨 Resultados y Conclusión de la Auditoría:
+Los resultados contradicen la intuición estadística, revelando una **Paradoja de la Minoría**:
 
+1.  **Sensibilidad en Mujeres (1.00):** A pesar de la escasez de datos (puntos 5.1 y 5.2), el modelo detectó el **100%** de los casos de enfermedad en mujeres. Esto sugiere que los patrones clínicos de infarto femenino en este dataset son muy distintivos y separables.
+2.  **Sensibilidad en Hombres (0.75):** A pesar de ser la mayoría, el modelo falló al detectar la enfermedad en el **25%** de los hombres enfermos.
+3.  **Veredicto de Sesgo:** Existe una brecha de rendimiento del 25% que penaliza a los hombres. El modelo es **injusto**, no por falta de datos masculinos, sino posiblemente por la complejidad/ruido de sus síntomas frente a la claridad de los femeninos.
 ---
 
 ## 6. 📝 Conclusiones y Recomendaciones
 
 1.  **Calidad sobre Cantidad:** La decisión de descartar el 60% de la data fue correcta para garantizar que las explicaciones (SHAP) se basaran en datos clínicos reales y no imputados.
 2.  **Transparencia:** Las herramientas XAI demostraron que el modelo "piensa" correctamente (usa las variables médicas adecuadas), pero eso no garantiza que sea justo.
-3.  **Recomendación de No-Despliegue:** A pesar de la buena precisión global, **el modelo no debe pasar a producción**.
-    * La disparidad de sensibilidad contra los hombres es éticamente inaceptable.
-    * **Próximos pasos:** Se requiere recolectar más datos masculinos de alta calidad o aplicar técnicas de regularización para equilibrar la sensibilidad entre géneros antes de su uso clínico.
+3.  **Recomendación de No-Despliegue:** A pesar de la buena precisión global (85%), **el modelo no debe pasar a producción**.
+    * La disparidad de sensibilidad contra los hombres (25% de falsos negativos) es éticamente inaceptable.
+    * **Próximos pasos:** Se requiere recolectar más datos de **hombres con cuadros clínicos complejos** para mejorar su detección y validar el modelo con una muestra externa de mujeres para asegurar que el 100% de éxito no sea un artefacto estadístico por el tamaño de la muestra.
 
 ---
