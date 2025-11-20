@@ -128,3 +128,71 @@ Los resultados contradicen la intuición estadística, revelando una **Paradoja 
     * **Próximos pasos:** Se requiere recolectar más datos de **hombres con cuadros clínicos complejos** para mejorar su detección y validar el modelo con una muestra externa de mujeres para asegurar que el 100% de éxito no sea un artefacto estadístico por el tamaño de la muestra.
 
 ---
+
+### 💻 Pasos para Ejecutar el Proyecto
+
+Para reproducir estos resultados en tu máquina local, sigue estos pasos:
+
+#### 1. Prerrequisitos
+Asegúrate de tener **Python** instalado (versión 3.8 o superior). Puedes verificarlo ejecutando:
+
+```bash
+python --version
+```
+
+Si no lo tienes, descárgalo desde python.org.
+
+2. Clonar el Repositorio
+
+Descarga el código fuente a tu computadora:
+
+```bash
+git clone https://github.com/JavierVMC29/maestria-ia-ml-actividad4-grupo2.git
+```
+
+```bash
+cd TU_REPOSITORIO
+```
+3. Configurar el Entorno Virtual (Recomendado)
+
+Crea y activa un entorno virtual para no afectar tu instalación global de Python:
+
+Windows:
+```bash
+python -m venv venv
+```
+```bash
+.\venv\Scripts\activate
+```
+Mac/Linux:
+```bash
+python3 -m venv venv
+```
+
+```bash
+source venv/bin/activate
+```
+
+4. Instalar Dependencias
+
+Instala todas las librerías necesarias ejecutando:
+
+```bash
+pip install -r requirements.txt
+```
+
+(El archivo requirements.txt incluye: pandas, numpy, scikit-learn, shap, matplotlib, seaborn).
+
+5. Ejecutar en VS Code
+
+    1. Abre la carpeta del proyecto en Visual Studio Code.
+
+    2. Instala la extensión "Jupyter" de Microsoft (búscala en la pestaña de Extensiones).
+
+    3. Abre el archivo del notebook (ej: main.ipynb).
+
+    4. En la esquina superior derecha, selecciona el Kernel y elige tu entorno virtual (venv).
+
+    5. Haz clic en "Run All" para ejecutar todo el análisis.
+
+¡Listo! Ahora podrás ver los gráficos y resultados.
